@@ -64,7 +64,7 @@ def build_lmdb_dicts(preprocess_all_data_dir: str, keep_all_entities: bool):
     LmdbImmutableDict.from_dict(subclasses_with_lists, output_file_path=data_files["subclasses"])
     shutil.copy(os.path.join(preprocess_all_data_dir, "descriptions_tns.pt"),
                 data_files["descriptions_tns"])
-    qcode_to_wiki = load_qcode_to_idx(os.path.join(preprocess_all_data_dir, "qcode_to_idx.json"))
+    qcode_to_wiki = load_qcode_to_idx(os.path.join(preprocess_all_data_dir, "qcode_to_label.json"))
     LmdbImmutableDict.from_dict(qcode_to_wiki, output_file_path=data_files["qcode_to_wiki"])
 
     # training data files
