@@ -61,7 +61,9 @@ def build_redirects(args=None):
 def generate_wiki_id_to_title(page_sql_gz_filepath: str, output_dir: str) -> Dict[str, str]:
     # page_id, namespace, title, restrictions, redirect, new, random, touched, links, latest, len, content_model, lang
     page_id_to_title: Dict[str, str] = dict()
-    pattern = re.compile("([0-9]+),([0-9]+),(.+),(.+),([0-9]+),([0-9]+),(.+),(.+),(.+),([0-9]+),([0-9]+),(.+),(.+)")
+    pattern = re.compile("([0-9]+),([0-9]+),(.+),(.+),(.+),(.+),(.+),(.+),(.+),(.+),(.+),(.+)")
+    # Pattern was completely broken!?!
+    # pattern = re.compile("([0-9]+),([0-9]+),(.+),(.+),([0-9]+),([0-9]+),(.+),(.+),(.+),([0-9]+),([0-9]+),(.+),(.+)")
     wiki_id_to_title_file = open(f'{output_dir}/wiki_id_to_title.json', 'w')
     with gzip.open(page_sql_gz_filepath, 'r') as f:
         for line in tqdm(f, total=5775):
@@ -77,7 +79,7 @@ def generate_wiki_id_to_title(page_sql_gz_filepath: str, output_dir: str) -> Dic
                     continue
                 groups = m.groups()
                 page_id, namespace, title, restrictions, redirect, new, random, touched, links, \
-                    latest, length, content_model, lang = groups
+                    latest, length, content_model = groups
                 if not namespace == '0':
                     continue
                 title = title[1:-1]

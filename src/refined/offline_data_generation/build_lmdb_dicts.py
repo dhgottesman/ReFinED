@@ -18,7 +18,7 @@ def build_lmdb_dicts(preprocess_all_data_dir: str, keep_all_entities: bool):
     # nest the output in the preprocess_all_data_dir data_dir
     # wikipedia or wikidata
 
-    new_data_dir = os.path.join(preprocess_all_data_dir, "organised_data_dir")
+    new_data_dir = os.path.join(preprocess_all_data_dir, "organised_data_dir_new_redirect")
     os.makedirs(new_data_dir, exist_ok=True)
 
     entity_set = "wikidata" if keep_all_entities else "wikipedia"
@@ -43,7 +43,7 @@ def build_lmdb_dicts(preprocess_all_data_dir: str, keep_all_entities: bool):
 
     # data files
     # Set max_cands to 30 to save space
-    pem = load_pem(pem_file=os.path.join(preprocess_all_data_dir, "wiki_pem.json"), max_cands=None)
+    pem = load_pem(pem_file=os.path.join(preprocess_all_data_dir, "wiki_pem.json"), max_cands=150)
     LmdbImmutableDict.from_dict(pem, output_file_path=data_files["wiki_pem"])
     del pem
     shutil.copy(os.path.join(preprocess_all_data_dir, "class_to_label.json"), data_files["class_to_label"])
@@ -82,19 +82,19 @@ def build_lmdb_dicts(preprocess_all_data_dir: str, keep_all_entities: bool):
     LmdbImmutableDict.from_dict(qcode_to_label, output_file_path=additional_data_files["qcode_to_label"])
 
     # add other expected files in the data_dir
-    for resource_name, data_file in resource_manager.get_data_files_info().items():
-        if resource_name in {
-            "roberta_base_model",
-            "roberta_base_model_config",
-            "roberta_base_vocab",
-            "roberta_base_tokenizer_merges",
-            "nltk_sentence_splitter_english",
-        }:
-            resource_manager.s3_manager.download_file_if_needed(
-                s3_bucket=data_file["s3_bucket"],
-                s3_key=data_file["s3_key"],
-                output_file_path=data_file["local_filename"],
-            )
+    # for resource_name, data_file in resource_manager.get_data_files_info().items():
+    #     if resource_name in {
+    #         "roberta_base_model",
+    #         "roberta_base_model_config",
+    #         "roberta_base_vocab",
+    #         "roberta_base_tokenizer_merges",
+    #         "nltk_sentence_splitter_english",
+    #     }:
+    #         resource_manager.s3_manager.download_file_if_needed(
+    #             s3_bucket=data_file["s3_bucket"],
+    #             s3_key=data_file["s3_key"],
+    #             output_file_path=data_file["local_filename"],
+    #         )
 
     print(f"Data is now contained in {preprocess_all_data_dir}/organised_data_dir/ which can be used by the "
           f"`PreprocessorInferenceOnly` class and `ResourceManager` class")

@@ -61,19 +61,20 @@ DATA_FILES_WIKIDATA = {
         "local_filename": "wikidata_data/qcode_to_idx.lmdb",
         "needed_for_inference": True
     },
-    "qcode_idx_to_class_idx": {
-        "s3_bucket": s3_resource_bucket,
-        "s3_key": s3_resource_prefix + "wikidata_data/qcode_to_class_tns_33831487-200.np",
-        "local_filename": "wikidata_data/qcode_to_class_tns_33831487-200.np",  # TODO remove hard-coding size
-        "needed_for_inference": True
-    },
-    # example change made for preprocess_all.py script
     # "qcode_idx_to_class_idx": {
     #     "s3_bucket": s3_resource_bucket,
-    #     "s3_key": s3_resource_prefix + "wikidata_data/qcode_to_class_tns_735901-7.np",
-    #     "local_filename": "wikidata_data/qcode_to_class_tns_735901-7.np",  # TODO remove hard-coding size
+    #     "s3_key": s3_resource_prefix + "wikidata_data/qcode_to_class_tns_33831487-200.np",
+    #     "local_filename": "wikidata_data/qcode_to_class_tns_33831487-200.np",  # TODO remove hard-coding size
     #     "needed_for_inference": True
     # },
+    # example change made for preprocess_all.py script
+    # s3_key is not correct since this is for accessing local data only
+    "qcode_idx_to_class_idx": {
+        "s3_bucket": s3_resource_bucket,
+        "s3_key": s3_resource_prefix + "wikidata_data/qcode_to_class_tns_735901-7.np",
+        "local_filename": "wikidata_data/qcode_to_class_tns_36448318-58.np",  # TODO remove hard-coding size
+        "needed_for_inference": True
+    },
 
     "subclasses": {
         "s3_bucket": s3_resource_bucket,

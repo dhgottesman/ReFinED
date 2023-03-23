@@ -16,6 +16,10 @@ dist/*
 # Data #
 data/
 datasets/
+*.json
+*.lmdb
+*.pt
+*.np
 
 # Generic #
 ###################

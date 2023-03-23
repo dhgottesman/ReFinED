@@ -99,7 +99,11 @@ def load_redirects(file_path: str, is_test: bool = False):
     with open(file_path, "r") as f:
         for line in tqdm(f, total=9e6, desc="Loading Wikipedia page redirects"):
             line = ujson.loads(line)
-            redirects[unescape_quotes(line["wiki_title"])] = unescape_quotes(line["dest_title"])
+            # Wikipedia article with just backslashes in title causes issues if turned into empty string
+            if (unescaped_dest_title := unescape_quotes(line["dest_title"])):
+                redirects[unescape_quotes(line["wiki_title"])] = unescaped_dest_title
+            else:
+                redirects[unescape_quotes(line["wiki_title"])] = double_backslash
             line_num += 1
             if is_test and line_num > 10000:
                 break
