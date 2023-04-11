@@ -38,4 +38,5 @@ wikidata_to_spacy_types = {
     "Q47574": "QUANTITY",  # unit of measurement
     "Q923933": "ORDINAL",  # ordinal numeral
     "Q63116": "CARDINAL",  # numeral
+    "Q618123": "GPE",  # geographical feature
 }

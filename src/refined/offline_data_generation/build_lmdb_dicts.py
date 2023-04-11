@@ -18,7 +18,7 @@ def build_lmdb_dicts(preprocess_all_data_dir: str, keep_all_entities: bool):
     # nest the output in the preprocess_all_data_dir data_dir
     # wikipedia or wikidata
 
-    new_data_dir = os.path.join(preprocess_all_data_dir, "organised_data_dir_new_redirect")
+    new_data_dir = os.path.join(preprocess_all_data_dir, "organised_data_dir_new_title")
     os.makedirs(new_data_dir, exist_ok=True)
 
     entity_set = "wikidata" if keep_all_entities else "wikipedia"
@@ -43,7 +43,7 @@ def build_lmdb_dicts(preprocess_all_data_dir: str, keep_all_entities: bool):
 
     # data files
     # Set max_cands to 30 to save space
-    pem = load_pem(pem_file=os.path.join(preprocess_all_data_dir, "wiki_pem.json"), max_cands=150)
+    pem = load_pem(pem_file=os.path.join(preprocess_all_data_dir, "wiki_pem.json"), max_cands=30)
     LmdbImmutableDict.from_dict(pem, output_file_path=data_files["wiki_pem"])
     del pem
     shutil.copy(os.path.join(preprocess_all_data_dir, "class_to_label.json"), data_files["class_to_label"])
@@ -64,7 +64,7 @@ def build_lmdb_dicts(preprocess_all_data_dir: str, keep_all_entities: bool):
     LmdbImmutableDict.from_dict(subclasses_with_lists, output_file_path=data_files["subclasses"])
     shutil.copy(os.path.join(preprocess_all_data_dir, "descriptions_tns.pt"),
                 data_files["descriptions_tns"])
-    qcode_to_wiki = load_qcode_to_idx(os.path.join(preprocess_all_data_dir, "qcode_to_label.json"))
+    qcode_to_wiki = load_labels(os.path.join(preprocess_all_data_dir, "qcode_to_label.json"))
     LmdbImmutableDict.from_dict(qcode_to_wiki, output_file_path=data_files["qcode_to_wiki"])
 
     # training data files
