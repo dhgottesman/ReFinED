@@ -14,7 +14,7 @@
 #   Juan Manuel Caicedo (juan@cavorite.com)
 #   Humberto Pereira (begini@gmail.com)
 #   Siegfried-A. Gevatter (siegfried@gevatter.com)
-#   Pedro Assis (pedroh2306@gmail.com)
+#   Pedro Assis (pedroh2306@gmail.com
 #   Wim Muskee (wimmuskee@gmail.com)
 #   Radics Geza (radicsge@gmail.com)
 #   orangain (orangain@gmail.com)

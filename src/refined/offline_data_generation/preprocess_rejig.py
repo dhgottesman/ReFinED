@@ -44,7 +44,7 @@ LOG = get_logger(__name__)
 # keep_all_entities=False means only keep Wikidata entities that have a Wikipedia page
 keep_all_entities = True
 
-OUTPUT_PATH = '/home/azureuser/ReFinED/src/refined/offline_data_generation/data_cache'
+OUTPUT_PATH = '/home/morg/dataset/refined_final'
 
 os.makedirs(OUTPUT_PATH, exist_ok=True)
 
@@ -154,7 +154,7 @@ def main():
                         help="y or n", )
     parser.add_argument('--additional_entities_file', type=str)
     cli_args = parser.parse_args()
-    cli_args.additional_entities_file = '/home/azureuser/additional_entities_unique.json'
+    # cli_args.additional_entities_file = '/home/azureuser/additional_entities_unique.json'
     debug = cli_args.debug.lower() == 'y'
 
     # Dont download
@@ -169,15 +169,15 @@ def main():
     # if not os.path.exists(os.path.join(OUTPUT_PATH, 'sitelinks_cnt.json')):
     #     build_wikidata_lookups(args_override=args)
 
-    # Redirects is cached
-    LOG.info('Step 3) Processing Wikipedia redirects dump.')
-    args = {'page_sql_gz_filepath': os.path.join(OUTPUT_PATH, WIKIPEDIA_PAGE_IDS_FILE),
-            'redirect_sql_gz_filepath': os.path.join(OUTPUT_PATH, WIKIPEDIA_REDIRECTS_FILE),
-            'output_dir': OUTPUT_PATH,
-            'overwrite_output_dir': True,
-            'test': False}
-    if not os.path.exists(os.path.join(OUTPUT_PATH, 'redirects.json')):
-        build_redirects(args=args)
+    # # Redirects is cached
+    # LOG.info('Step 3) Processing Wikipedia redirects dump.')
+    # args = {'page_sql_gz_filepath': os.path.join(OUTPUT_PATH, WIKIPEDIA_PAGE_IDS_FILE),
+    #         'redirect_sql_gz_filepath': os.path.join(OUTPUT_PATH, WIKIPEDIA_REDIRECTS_FILE),
+    #         'output_dir': OUTPUT_PATH,
+    #         'overwrite_output_dir': True,
+    #         'test': False}
+    # if not os.path.exists(os.path.join(OUTPUT_PATH, 'redirects.json')):
+    #     build_redirects(args=args)
 
     # wikipedia_links_aligned_spans.json is cached... just wikipedia_links_aligned.json with additional predicted_spans
     # LOG.info('Step 4) Extract text from Wikipedia dump.')
@@ -187,22 +187,22 @@ def main():
     #     merge_files_and_extract_links(input_dir=os.path.join(OUTPUT_PATH, 'preprocessed_wikipedia'),
     #                                 resources_dir=OUTPUT_PATH, output_dir=OUTPUT_PATH)
 
-    LOG.info('Step 5) Building PEM lookup.')
-    # additional entity set file
-    # {label: "label",
-    # alias: ["alias_1", "alias2"],
-    # entity_type: ["qcode_1", "qcode_2"],
-    # entity_description: "english description"
-    # }
-    # A1, A2 instead of Q1, Q2
+    # LOG.info('Step 5) Building PEM lookup.')
+    # # additional entity set file
+    # # {label: "label",
+    # # alias: ["alias_1", "alias2"],
+    # # entity_type: ["qcode_1", "qcode_2"],
+    # # entity_description: "english description"
+    # # }
+    # # A1, A2 instead of Q1, Q2
     additional_entities: List[AdditionalEntity] = []
 
-    if cli_args.additional_entities_file is not None:
-        print('Adding additional entities')
-        with open(cli_args.additional_entities_file, 'r') as f:
-            for line in tqdm(f, desc='Loading additional entities'):
-                line = json.loads(line)
-                additional_entities.append(AdditionalEntity(**line))
+    # if cli_args.additional_entities_file is not None:
+    #     print('Adding additional entities')
+    #     with open(cli_args.additional_entities_file, 'r') as f:
+    #         for line in tqdm(f, desc='Loading additional entities'):
+    #             line = json.loads(line)
+    #             additional_entities.append(AdditionalEntity(**line))
 
     # Dont have humans in additional entities
     # add extra human and fictional humans to human qcodes
@@ -226,32 +226,32 @@ def main():
     # if not os.path.exists(os.path.join(OUTPUT_PATH, AIDA_MEANS_FILE)):
     #     download_url_with_progress_bar(url=AIDA_MEANS_URL, output_path=os.path.join(OUTPUT_PATH, AIDA_MEANS_FILE))
 
-    # Use wiki_pem.json from new wikidata
-    if not os.path.exists(os.path.join(OUTPUT_PATH, 'wiki_pem.json')):
-        build_pem_lookup(aligned_wiki_file=os.path.join(OUTPUT_PATH, 'wikipedia_links_aligned.json'),
-                        output_dir=OUTPUT_PATH, resources_dir=OUTPUT_PATH, keep_all_entities=keep_all_entities,
-                        additional_entities=additional_entities,
-                        is_test=debug)
+    # # Use wiki_pem.json from new wikidata
+    # if not os.path.exists(os.path.join(OUTPUT_PATH, 'wiki_pem.json')):
+    #     build_pem_lookup(aligned_wiki_file=os.path.join(OUTPUT_PATH, 'wikipedia_links_aligned.json'),
+    #                     output_dir=OUTPUT_PATH, resources_dir=OUTPUT_PATH, keep_all_entities=keep_all_entities,
+    #                     additional_entities=additional_entities,
+    #                     is_test=debug)
 
-    LOG.info('Step 6) Building entity index from PEM.')
-    if not os.path.exists(os.path.join(OUTPUT_PATH, 'qcode_to_idx.json')):
-        build_entity_index(os.path.join(OUTPUT_PATH, 'wiki_pem.json'), OUTPUT_PATH)
+    # LOG.info('Step 6) Building entity index from PEM.')
+    # if not os.path.exists(os.path.join(OUTPUT_PATH, 'qcode_to_idx.json')):
+    #     build_entity_index(os.path.join(OUTPUT_PATH, 'wiki_pem.json'), OUTPUT_PATH)
 
     # build descriptions (include labels without descriptions, maybe some alts as well should keep it short)
-    LOG.info('Step 7) Building descriptions tensor.')
-    if not os.path.exists(os.path.join(OUTPUT_PATH, 'descriptions_tns.pt')):
-        create_description_tensor(output_path=OUTPUT_PATH,
-                                qcode_to_idx_filename=os.path.join(OUTPUT_PATH, 'qcode_to_idx.json'),
-                                desc_filename=os.path.join(OUTPUT_PATH, 'desc.json'),
-                                label_filename=os.path.join(OUTPUT_PATH, 'qcode_to_label.json'),
-                                wiki_to_qcode=os.path.join(OUTPUT_PATH, 'enwiki.json'),
-                                additional_entities=additional_entities,
-                                keep_all_entities=keep_all_entities,
-                                is_test=debug)
+    # LOG.info('Step 7) Building descriptions tensor.')
+    # if not os.path.exists(os.path.join(OUTPUT_PATH, 'descriptions_tns.pt')):
+    #     create_description_tensor(output_path=OUTPUT_PATH,
+    #                             qcode_to_idx_filename=os.path.join(OUTPUT_PATH, 'qcode_to_idx.json'),
+    #                             desc_filename=os.path.join(OUTPUT_PATH, 'desc.json'),
+    #                             label_filename=os.path.join(OUTPUT_PATH, 'qcode_to_label.json'),
+    #                             wiki_to_qcode=os.path.join(OUTPUT_PATH, 'enwiki.json'),
+    #                             additional_entities=additional_entities,
+    #                             keep_all_entities=keep_all_entities,
+    #                             is_test=debug)
 
-    LOG.info('Step 8) Selecting classes tensor.')
-    if not os.path.exists(os.path.join(OUTPUT_PATH, 'chosen_classes.txt')):
-        select_classes(resources_dir=OUTPUT_PATH, is_test=debug)
+    # LOG.info('Step 8) Selecting classes tensor.')
+    # if not os.path.exists(os.path.join(OUTPUT_PATH, 'chosen_classes.txt')):
+    #     select_classes(resources_dir=OUTPUT_PATH, is_test=debug)
 
     LOG.info('Step 9) Creating tensors.')
     if not os.path.exists(os.path.join(OUTPUT_PATH, 'class_to_idx.json')):

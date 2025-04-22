@@ -37,7 +37,8 @@ def extract_useful_info(entity):
         # group by pcode -> [list of qcodes]
         for obj in objs:
             statements_cnt += 1
-            if not obj['mainsnak']['datatype'] == 'wikibase-item' or obj['mainsnak']['snaktype'] == 'somevalue' \
+            if 'datatype' not in obj['mainsnak'] or not obj['mainsnak']['datatype'] == 'wikibase-item' or \
+                obj['mainsnak']['snaktype'] == 'somevalue' \
                     or 'datavalue' not in obj['mainsnak']:
                 continue
             if pcode not in triples:

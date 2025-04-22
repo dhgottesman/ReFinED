@@ -43,7 +43,7 @@ LOG = get_logger(__name__)
 # keep_all_entities=False means only keep Wikidata entities that have a Wikipedia page
 keep_all_entities = True
 
-OUTPUT_PATH = 'data_old_wiki'
+OUTPUT_PATH = '/home/morg/dataset/refined'
 
 os.makedirs(OUTPUT_PATH, exist_ok=True)
 
@@ -156,8 +156,8 @@ def main():
     debug = cli_args.debug.lower() == 'y'
 
     LOG.info('Step 1) Downloading the raw data for Wikidata and Wikipedia.')
-    # if not os.path.exists(os.path.join(OUTPUT_PATH, 'wikipedia_articles.xml.bz2')):
-    #     download_dumps()
+    if not os.path.exists(os.path.join(OUTPUT_PATH, 'wikipedia_articles.xml.bz2')):
+        download_dumps()
 
     LOG.info('Step 2) Processing Wikidata dump to build lookups and sets.')
     args = {'dump_file_path': os.path.join(OUTPUT_PATH, WIKIDATA_DUMP_FILE),
@@ -165,7 +165,7 @@ def main():
     if not os.path.exists(os.path.join(OUTPUT_PATH, 'sitelinks_cnt.json')):
         build_wikidata_lookups(args_override=args)
 
-    LOG.info('Step 3) Processing Wikipedia redirects dump.')
+    # LOG.info('Step 3) Processing Wikipedia redirects dump.')
     args = {'page_sql_gz_filepath': os.path.join(OUTPUT_PATH, WIKIPEDIA_PAGE_IDS_FILE),
             'redirect_sql_gz_filepath': os.path.join(OUTPUT_PATH, WIKIPEDIA_REDIRECTS_FILE),
             'output_dir': OUTPUT_PATH,

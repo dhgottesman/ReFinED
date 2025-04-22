@@ -71,8 +71,8 @@ DATA_FILES_WIKIDATA = {
     # s3_key is not correct since this is for accessing local data only
     "qcode_idx_to_class_idx": {
         "s3_bucket": s3_resource_bucket,
-        "s3_key": s3_resource_prefix + "wikidata_data/qcode_to_class_tns_735901-7.np",
-        "local_filename": "wikidata_data/qcode_to_class_tns_36448318-58.np",  # TODO remove hard-coding size
+        "s3_key": s3_resource_prefix + "wikidata_data/qcode_to_class_tns_40811672-55.np",
+        "local_filename": "wikidata_data/qcode_to_class_tns_40811672-55.np",  # TODO remove hard-coding size
         "needed_for_inference": True
     },
 
@@ -164,8 +164,8 @@ DATA_FILES_WIKIPEDIA = {
     },
     "qcode_idx_to_class_idx": {
         "s3_bucket": s3_resource_bucket,
-        "s3_key": s3_resource_prefix + "wikipedia_data/qcode_to_class_tns_6269457-138.np",
-        "local_filename": "wikipedia_data/qcode_to_class_tns_6269457-138.np",
+        "s3_key": s3_resource_prefix + "wikipedia_data/qcode_to_class_tns_40811672-55.np",
+        "local_filename": "wikipedia_data/qcode_to_class_tns_40811672-55.np",
         "needed_for_inference": True
     },
     "subclasses": {

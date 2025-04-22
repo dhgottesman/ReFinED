@@ -18,7 +18,7 @@ def build_lmdb_dicts(preprocess_all_data_dir: str, keep_all_entities: bool):
     # nest the output in the preprocess_all_data_dir data_dir
     # wikipedia or wikidata
 
-    new_data_dir = os.path.join(preprocess_all_data_dir, "organised_data_dir_new_title")
+    new_data_dir = os.path.join(preprocess_all_data_dir, "organised_data_dir")
     os.makedirs(new_data_dir, exist_ok=True)
 
     entity_set = "wikidata" if keep_all_entities else "wikipedia"
@@ -81,7 +81,7 @@ def build_lmdb_dicts(preprocess_all_data_dir: str, keep_all_entities: bool):
     qcode_to_label = load_labels(os.path.join(preprocess_all_data_dir, 'qcode_to_label.json'))
     LmdbImmutableDict.from_dict(qcode_to_label, output_file_path=additional_data_files["qcode_to_label"])
 
-    # add other expected files in the data_dir
+    # # add other expected files in the data_dir
     # for resource_name, data_file in resource_manager.get_data_files_info().items():
     #     if resource_name in {
     #         "roberta_base_model",

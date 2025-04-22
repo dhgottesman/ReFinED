@@ -30,11 +30,7 @@ def main():
     # DDP (ensure batch_elements_included is used)
 
     training_args = parse_training_args()
-    training_args.data_dir = '/home/azureuser/ReFinED/src/refined/offline_data_generation/data_no_add/organised_data_dir'
-    training_args.entity_set = 'wikidata'
-    training_args.batch_size = 64
-    training_args.experiment_name = 'test_no_add'
-    training_args.download_files = False
+
     resource_manager = ResourceManager(S3Manager(),
                                        data_dir=training_args.data_dir,
                                        entity_set=training_args.entity_set,
@@ -47,7 +43,7 @@ def main():
         resource_manager.download_additional_files_if_needed()
         resource_manager.download_training_files_if_needed()
 
-    preprocessor = PreprocessorInferenceOnly(
+        preprocessor = PreprocessorInferenceOnly(
         data_dir=training_args.data_dir,
         debug=training_args.debug,
         max_candidates=training_args.num_candidates_train,
