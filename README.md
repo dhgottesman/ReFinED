@@ -1,4 +1,83 @@
 # ReFinED
+## Instructions Specific to the Knowledge Editing Suite (KAS)
+The KAS suite uses the `wikipedia_model` variant of the ReFinED model, performing zero-shot inference on Wikipedia pages as of **April 1, 2025**. 
+This forked repository includes essential bug fixes to ensure smooth updates to the model’s knowledge base.
+
+### Processing the Latest Wikipedia Dump
+Follow the following steps in `preprocess_all.py`.
+
+(Step 1) **Download** the raw data for both Wikidata and Wikipedia.
+
+(Step 2) **Process** the Wikidata dump to generate lookup tables and entity sets.
+
+(Step 3) **Process** the Wikipedia redirects dump.
+> ⚠️ *Important:* Use this forked version, as the original repository contains broken redirect parsing logic.
+
+(Step 4) **Extract text** from the Wikipedia dump.
+> ⚠️ *Important:* This step parses the XML into clean article text for training the KAS language model.
+ 
+(Step 5) **Build** the PEM lookup.
+
+(Step 6) **Create** the entity index using the PEM data.
+
+(Step 7) **Generate** the descriptions tensor.
+
+(Step 8) **Skip**.
+```python
+from refined.inference.processor import Refined
+refined = Refined.from_pretrained(model_name='wikipedia_model',
+                                  entity_set="wikipedia",
+                                  download_files=True)
+import json
+
+def write_q_ids_to_file(data, filename):
+     with open(filename, 'w') as file:
+         for key in data.keys():
+             file.write(f"{key}\n")
+
+with open("~/.cache/refined/wikipedia_data/class_to_idx.json", "r") as f:
+     data = json.load(f)
+
+# entity_set is either "wikidata" or "wikipedia"
+write_q_ids_to_file(data, os.path.join(OUTPUT_PATH, entity_set, "class_to_idx.json")
+```
+
+(Step 9) **Create** the model tensors.
+
+(Step 10) **Generate** the class labels lookup.
+
+(Steps 11-14) **Skip**.
+
+(Step 15) **Build** the LMDB dictionaries and store output files into the expected directory structure.
+> ⚠️ *Important:* Use this forked version, as the original repository contains broken logic when building the dictionaries.
+
+### Running the Updated ReFinED Model
+```python
+preprocessor = PreprocessorInferenceOnly(
+    data_dir=data_dir,
+    max_candidates=30,
+    transformer_name="roberta-base",
+    ner_tag_to_ix=NER_TAG_TO_IX,  # for now include default ner_to_tag_ix can make configurable in future
+    entity_set="wikidata",
+    use_precomputed_description_embeddings=False
+)
+
+refined = Refined(
+    model_file_or_model=os.path.join(OUTPUT_DIR, "organised_data_dir, "wikipedia_model", "model.pt"),
+    model_config_file_or_model_config=os.path.join(OUTPUT_DIR, "organised_data_dir, "wikipedia_model", "config.json"),
+    entity_set="wikidata",
+    data_dir=data_dir,
+    use_precomputed_descriptions = False,
+    download_files=False,
+    preprocessor=preprocessor,
+)
+
+text = "Grok is developed by XAi, and was launched in 2023 as an initiative by Elon Musk."
+spans = refined.process_text(text)
+print(spans)
+> [['Grok', Entity(wikidata_entity_id=Q123361035), None], ['XAi', Entity(wikidata_entity_id=Q120599684), 'ORG'], ['Elon Musk', Entity(wikidata_entity_id=Q317521), 'PERSON']]
+```
+
 ## Quickstart
 ```commandline
 pip install https://github.com/amazon-science/ReFinED/archive/refs/tags/V1.zip
