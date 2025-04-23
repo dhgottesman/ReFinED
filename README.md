@@ -54,7 +54,7 @@ write_q_ids_to_file(data, os.path.join(OUTPUT_PATH, entity_set, "class_to_idx.js
 ### Running the Updated ReFinED Model
 ```python
 preprocessor = PreprocessorInferenceOnly(
-    data_dir=data_dir,
+    data_dir=OUTPUT_DIR,
     max_candidates=30,
     transformer_name="roberta-base",
     ner_tag_to_ix=NER_TAG_TO_IX,  # for now include default ner_to_tag_ix can make configurable in future
@@ -63,10 +63,10 @@ preprocessor = PreprocessorInferenceOnly(
 )
 
 refined = Refined(
-    model_file_or_model=os.path.join(OUTPUT_DIR, "organised_data_dir, "wikipedia_model", "model.pt"),
-    model_config_file_or_model_config=os.path.join(OUTPUT_DIR, "organised_data_dir, "wikipedia_model", "config.json"),
+    model_file_or_model=os.path.join(OUTPUT_DIR, "organised_data_dir", "wikipedia_model", "model.pt"),
+    model_config_file_or_model_config=os.path.join(OUTPUT_DIR, "organised_data_dir", "wikipedia_model", "config.json"),
     entity_set="wikidata",
-    data_dir=data_dir,
+    data_dir=OUTPUT_DIR,
     use_precomputed_descriptions = False,
     download_files=False,
     preprocessor=preprocessor,
