@@ -7,7 +7,8 @@ from typing import Any, Dict, List, Optional, Set
 
 import torch
 from sklearn.metrics import classification_report
-from torch.cuda.amp import GradScaler, autocast
+from torch.amp import GradScaler, autocast
+
 from torch.utils.data import ConcatDataset, DataLoader
 from tqdm.auto import tqdm, trange
 from transformers import (
@@ -326,7 +327,7 @@ def train(
             batch = (tns.to(device) for tns in batch)
             tokens, attention_mask, labels = batch
             optimiser.zero_grad()
-            with autocast():
+            with autocast(device_type='cuda'):
                 output = model(input_ids=tokens, labels=labels, attention_mask=attention_mask)
             loss = output[0]
             if step_num % 25 == 0:

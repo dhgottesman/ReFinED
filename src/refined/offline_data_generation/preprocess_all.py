@@ -1,7 +1,7 @@
 # This is a script that does all the data pre-processing necessary to generate the data needed to
 # train a new ReFinED ER model from scratch.
 # Data files are written for intermediate steps so work will resume if the script is restarted.
-
+print("STARTING PREPROCESSING", flush=True)
 import copy
 import json
 import logging
@@ -175,10 +175,10 @@ def main():
         build_redirects(args=args)
 
     LOG.info('Step 4) Extract text from Wikipedia dump.')
-    if not os.path.exists(os.path.join(OUTPUT_PATH, 'wikipedia_links_aligned.json')):
+    if not os.path.exists(os.path.join(OUTPUT_PATH, 'wikipedia_links_aligned_sections_spans.json')):
         preprocess_wikipedia(dump_path=os.path.join(OUTPUT_PATH, WIKIPEDIA_ARTICLES_FILE),
-                            save_path=os.path.join(OUTPUT_PATH, 'preprocessed_wikipedia'))
-        merge_files_and_extract_links(input_dir=os.path.join(OUTPUT_PATH, 'preprocessed_wikipedia'),
+                            save_path=os.path.join(OUTPUT_PATH, 'preprocessed_wikipedia_sections'))
+        merge_files_and_extract_links(input_dir=os.path.join(OUTPUT_PATH, 'preprocessed_wikipedia_sections'),
                                     resources_dir=OUTPUT_PATH, output_dir=OUTPUT_PATH)
 
     LOG.info('Step 5) Building PEM lookup.')
