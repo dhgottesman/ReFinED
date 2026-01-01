@@ -141,7 +141,7 @@ class MentionDetector:
             with inference_mode():
                 # may need to pass pointers back to text if batching different texts
                 # or could remember offsets of multiple texts and batch in order
-                with autocast():
+                with autocast(device_type='cuda'):
                     output = self.model(input_ids=tokens, attention_mask=attention_mask)
                 preds = output[0]
                 tokens_is_special = [

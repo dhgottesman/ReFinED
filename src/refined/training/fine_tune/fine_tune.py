@@ -5,7 +5,8 @@ from statistics import mean
 from typing import Dict, Iterable, Optional
 
 import torch
-from torch.cuda.amp import autocast, GradScaler
+from torch.amp import autocast
+, GradScaler
 from torch.optim import AdamW
 from torch.utils.data import DataLoader
 from tqdm.auto import trange, tqdm
@@ -113,7 +114,7 @@ def run_fine_tuning_loops(refined: Refined, fine_tuning_args: TrainingArgs, trai
         total_loss = 0.0
         for step, batch in tqdm(enumerate(training_dataloader), total=len(training_dataloader)):
             batch = batch.to(fine_tuning_args.device)
-            with autocast():
+            with autocast(device_type='cuda'):
                 output = model(batch=batch)
                 loss = output.ed_loss + output.et_loss + (output.description_loss * 0.01)
                 if fine_tuning_args.el:

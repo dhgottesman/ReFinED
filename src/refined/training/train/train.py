@@ -2,7 +2,7 @@ import os
 from typing import List
 
 import torch
-from torch.cuda.amp import GradScaler
+from torch.amp import GradScaler
 from torch.optim import AdamW
 from torch.utils.data import DataLoader
 from transformers import get_linear_schedule_with_warmup

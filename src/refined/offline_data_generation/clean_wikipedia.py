@@ -23,7 +23,7 @@ def str2bool(v):
 
 
 def preprocess_wikipedia(dump_path, save_path, keep_links=True, remove_disambig_pages=True, keep_categories=True,
-                         force_overwrite=False):
+                         force_overwrite=False, keep_sections=True):
     """
     Initiate wikipedia preprocessing (cleaning of text, removing tables etc.) using wiki_extractor.py
     Cleaned dump will be around 18GB
@@ -48,8 +48,19 @@ def preprocess_wikipedia(dump_path, save_path, keep_links=True, remove_disambig_
     if keep_categories:
         cmd += ' --extract_categories'
 
-    st = time.time()
+    if keep_sections:
+        cmd += ' --sections'
 
+    st = time.time()
+    print('Starting Wikipedia dump preprocessing...')
+    print('Command:', cmd)
+    print('Dump path:', dump_path)
+    print('Save path:', save_path)
+    print('Keep links:', keep_links)
+    print('Remove disambiguation pages:', remove_disambig_pages)
+    print('Keep categories:', keep_categories)
+    print('Force overwrite:', force_overwrite)
+    print('Keep sections:', keep_sections)
     process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
 
@@ -73,7 +84,8 @@ if __name__ == '__main__':
                                                                                'each page')
     parser.add_argument('--force_overwrite', default=False, type=str2bool, help='If True, overwrite existing cleaned '
                                                                                 'dump if one exists')
+    parser.add_argument('--keep_sections', default=True, type=str2bool, help='Whether to keep sections in the text')
     args = parser.parse_args()
 
     preprocess_wikipedia(args.dump_path, args.save_dir, args.keep_links, args.remove_disambig_pages,
-                         args.keep_categories, args.force_overwrite)
+                         args.keep_categories, args.force_overwrite, args.keep_sections)

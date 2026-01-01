@@ -6,7 +6,8 @@ from typing import Iterable, List, Optional, Union
 import numpy as np
 import torch
 from torch import Tensor
-from torch.cuda.amp import autocast
+from torch.amp import autocast
+
 from torch.nn import DataParallel
 from tqdm import trange
 
@@ -290,7 +291,7 @@ class Refined(object):
         if self.n_gpu == 1 or True:
             batch = batch.to(self.device)
         self.model.eval()
-        with autocast():
+        with autocast(device_type='cuda'):
             if hasattr(torch, "inference_mode"):
                 inference_mode = torch.inference_mode
             else:
