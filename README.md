@@ -1,6 +1,6 @@
 # ReFinED
-## Instructions Specific to the Knowledge Editing Suite (KAS)
-The KAS suite uses the `wikipedia_model` variant of the ReFinED model, performing zero-shot inference on Wikipedia pages as of **April 1, 2025**. 
+## Instructions Specific to LMEnt
+LMEnt uses the `wikipedia_model` variant of the ReFinED model, performing zero-shot inference on Wikipedia pages as of **April 1, 2025**. 
 This forked repository includes essential bug fixes to ensure smooth updates to the model’s knowledge base.
 
 ### Processing the Latest Wikipedia Dump
