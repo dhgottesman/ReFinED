@@ -14,7 +14,7 @@ Follow the following steps in `preprocess_all.py`.
 > ⚠️ *Important:* Use this forked version, as the original repository contains broken redirect parsing logic.
 
 (Step 4) **Extract text** from the Wikipedia dump.
-> ⚠️ *Important:* This step parses the XML into clean article text for training the KAS language model.
+> ⚠️ *Important:* This step parses the XML into clean article text for training the LMEnt language models.
  
 (Step 5) **Build** the PEM lookup.
 
